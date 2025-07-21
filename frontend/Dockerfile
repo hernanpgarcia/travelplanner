@@ -20,4 +20,4 @@ RUN npm install -g http-server
 EXPOSE 3000
 
 # Start command - http-server has better Railway compatibility
-CMD ["sh", "-c", "http-server dist -p ${PORT:-3000} --cors -c-1"]
+CMD ["sh", "-c", "http-server dist -p ${PORT:-3000} --cors -c-1 --host 0.0.0.0"]
