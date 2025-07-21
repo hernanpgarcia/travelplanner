@@ -21,14 +21,11 @@ RUN poetry config virtualenvs.create false
 COPY pyproject.toml ./
 COPY poetry.loc[k] ./
 
-# Install dependencies (generate lock file if it doesn't exist)
+# Install dependencies (generate lock file if it doesn't exist)  
 RUN poetry lock --no-update || true && poetry install --only=main --no-root
 
 # Copy application code
 COPY . .
-
-# Install project
-RUN poetry install --only=main
 
 # Create non-root user
 RUN adduser --disabled-password --gecos '' appuser && \
