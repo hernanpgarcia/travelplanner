@@ -2,7 +2,6 @@ import { Routes, Route } from 'react-router-dom'
 
 // Import shared components
 import { Layout } from '@/shared/components/Layout'
-import { LoadingSpinner } from '@/shared/components/LoadingSpinner'
 
 // Import features (these will be lazy loaded in production)
 import { LandingPage } from '@/features/auth/components/LandingPage'
