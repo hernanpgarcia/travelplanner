@@ -1,7 +1,10 @@
 [build]
 builder = "nixpacks"
+buildCommand = "cd backend && pip install poetry && poetry config virtualenvs.create false && poetry install --only=main"
+watchPatterns = ["backend/**"]
 
 [deploy]
+startCommand = "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
 healthcheckPath = "/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
@@ -10,7 +13,9 @@ restartPolicyMaxRetries = 10
 [environments.production.variables]
 ENVIRONMENT = "production"
 DEBUG = "false"
+PYTHONPATH = "backend"
 
 [environments.staging.variables]
 ENVIRONMENT = "staging"
 DEBUG = "true"
+PYTHONPATH = "backend"
