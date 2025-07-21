@@ -1,0 +1,17 @@
+# Railway ignore file for backend  
+# This ensures Railway uses our Dockerfile instead of auto-detection
+
+# Python files that would trigger auto-detection
+requirements.txt.backup
+Pipfile.backup
+
+# Development files
+*.log
+.env.local
+.env.development
+.DS_Store
+__pycache__/
+*.pyc
+
+# Documentation  
+README.md

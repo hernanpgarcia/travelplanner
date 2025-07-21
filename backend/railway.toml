@@ -1,0 +1,19 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[environments.production.variables]
+ENVIRONMENT = "production"
+DEBUG = "false"
+PYTHONPATH = "/app"
+
+[environments.staging.variables]
+ENVIRONMENT = "staging" 
+DEBUG = "true"
+PYTHONPATH = "/app"

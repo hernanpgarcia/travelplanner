@@ -1,0 +1,15 @@
+# Railway ignore file for frontend
+# This ensures Railway uses our Dockerfile instead of auto-detection
+
+# Node.js files that would trigger auto-detection
+package-lock.json.backup
+node_modules.backup
+
+# Development files
+*.log
+.env.local
+.env.development
+.DS_Store
+
+# Documentation
+README.md
