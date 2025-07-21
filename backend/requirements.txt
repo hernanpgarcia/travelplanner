@@ -4,3 +4,9 @@ pydantic==2.6.0
 pydantic-settings==2.2.0
 python-dotenv==1.0.1
 gunicorn==21.2.0
+# Database dependencies
+sqlalchemy==2.0.23
+asyncpg==0.29.0
+alembic==1.12.1
+# Structured logging
+structlog==23.2.0

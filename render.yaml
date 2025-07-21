@@ -25,3 +25,10 @@ services:
         value: production
       - key: PYTHON_VERSION
         value: 3.11.8
+
+  # PostgreSQL Database
+  - type: pserv
+    name: travelplanner-database
+    env: postgresql
+    plan: starter
+    ipAllowList: []
