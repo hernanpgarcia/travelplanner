@@ -13,11 +13,8 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Type check separately (optional, can comment out for faster builds)
-RUN npm run type-check || true
-
-# Build application with Vite only
-RUN npx vite build
+# Build application directly with Vite (skip type checking, disable sourcemaps for faster builds)
+RUN NODE_ENV=production npx vite build --mode production --minify
 
 # Production stage - use Node.js with serve for Railway compatibility  
 FROM node:18-alpine

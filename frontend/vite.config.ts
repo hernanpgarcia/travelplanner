@@ -20,18 +20,19 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
-    // Bundle size optimization
+    sourcemap: process.env.NODE_ENV !== 'production', // Disable sourcemaps in production
+    minify: 'esbuild', // Use esbuild for faster minification
+    // Bundle size optimization - simplified for production builds
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
           router: ['react-router-dom'],
-          query: ['@tanstack/react-query'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
         },
       },
     },
+    // Increase chunk size warning limit
+    chunkSizeWarningLimit: 1000,
   },
   preview: {
     port: 3000,
