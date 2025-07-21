@@ -4,14 +4,14 @@ FROM node:18-alpine as builder
 # Set working directory
 WORKDIR /app
 
-# Copy package files  
-COPY package*.json ./
+# Copy package files from frontend directory
+COPY frontend/package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy source code
-COPY . .
+# Copy source code from frontend directory
+COPY frontend/ .
 
 # Build application directly with Vite (skip type checking, disable sourcemaps for faster builds)
 RUN NODE_ENV=production npx vite build --mode production --minify
@@ -28,8 +28,8 @@ RUN npm install -g serve
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
 
-# Copy start script
-COPY start.sh ./start.sh
+# Copy start script from frontend directory
+COPY frontend/start.sh ./start.sh
 RUN chmod +x start.sh
 
 # Create non-root user

@@ -17,18 +17,18 @@ RUN pip install poetry
 # Configure poetry: don't create virtual environment
 RUN poetry config virtualenvs.create false
 
-# Copy dependency files
-COPY pyproject.toml ./
-COPY poetry.loc[k] ./
+# Copy dependency files from backend directory
+COPY backend/pyproject.toml ./
+COPY backend/poetry.loc[k] ./
 
 # Install dependencies (generate lock file if it doesn't exist)  
 RUN poetry lock --no-update || true && poetry install --only=main --no-root
 
-# Copy application code
-COPY . .
+# Copy application code from backend directory
+COPY backend/ .
 
-# Copy and set up start script
-COPY start.sh ./start.sh
+# Copy and set up start script from backend directory
+COPY backend/start.sh ./start.sh
 RUN chmod +x start.sh
 
 # Create non-root user and set permissions
