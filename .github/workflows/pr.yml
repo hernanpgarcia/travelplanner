@@ -1,0 +1,223 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  PYTHON_VERSION: "3.11"
+  NODE_VERSION: "18"
+
+jobs:
+  # PR Validation
+  validate-pr:
+    name: Validate PR
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check PR title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            chore
+          requireScope: false
+      
+      - name: Check for Linear ticket reference
+        run: |
+          if ! echo "${{ github.event.pull_request.title }}" | grep -qE "(TRAVEL-|travel-)[0-9]+"; then
+            echo "❌ PR title must contain a Linear ticket reference (e.g., TRAVEL-123)"
+            exit 1
+          fi
+          echo "✅ Linear ticket reference found"
+
+  # Quick Tests for PR
+  quick-tests:
+    name: Quick Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: travelplanner_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+      
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: poetry install
+      
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+      
+      - name: Backend code quality
+        working-directory: ./backend
+        run: |
+          poetry run black --check .
+          poetry run isort --check-only .
+          poetry run flake8 .
+      
+      - name: Frontend code quality
+        working-directory: ./frontend
+        run: |
+          npm run lint
+          npm run type-check
+      
+      - name: Backend unit tests
+        working-directory: ./backend
+        run: poetry run pytest tests/unit/ -v
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/travelplanner_test
+          SECRET_KEY: test-secret-key
+          ENVIRONMENT: test
+      
+      - name: Frontend unit tests
+        working-directory: ./frontend
+        run: npm run test
+
+  # Size Analysis
+  bundle-analysis:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+      
+      - name: Build and analyze bundle
+        working-directory: ./frontend
+        run: |
+          npm run build
+          npx bundlesize
+      
+      - name: Comment bundle size
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './frontend/dist';
+            
+            if (fs.existsSync(path)) {
+              const stats = fs.statSync(path + '/assets');
+              const size = (stats.size / 1024 / 1024).toFixed(2);
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `📦 Bundle size: ${size} MB`
+              });
+            }
+
+  # Dependency Security Check
+  security-check:
+    name: Security Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+      
+      - name: Check Python dependencies
+        working-directory: ./backend
+        run: |
+          poetry install
+          poetry run safety check
+      
+      - name: Check Node.js dependencies
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm audit --audit-level=high
+
+  # Changes Detection
+  detect-changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.changes.outputs.backend }}
+      frontend: ${{ steps.changes.outputs.frontend }}
+      docs: ${{ steps.changes.outputs.docs }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Detect changes
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+              - 'docker-compose.yml'
+              - '.github/workflows/**'
+            frontend:
+              - 'frontend/**'
+              - '.github/workflows/**'
+            docs:
+              - 'docs/**'
+              - '*.md'
+              - '.github/workflows/**'
