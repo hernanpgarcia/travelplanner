@@ -17,15 +17,15 @@ class Settings(BaseSettings):
     """Application settings with environment variable support."""
     
     # Database Configuration
-    database_url: str
+    database_url: str = "postgresql://user:pass@localhost:5432/travelplanner"
     database_pool_size: int = 20
     database_max_overflow: int = 30
     
     # Redis Configuration
-    redis_url: str
+    redis_url: str = "redis://localhost:6379/0"
     
     # Security Configuration
-    secret_key: str
+    secret_key: str = "your-secret-key-change-in-production"
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 1440  # 24 hours
     
