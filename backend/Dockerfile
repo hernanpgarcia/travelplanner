@@ -27,9 +27,14 @@ RUN poetry lock --no-update || true && poetry install --only=main --no-root
 # Copy application code
 COPY . .
 
-# Create non-root user
+# Copy and set up start script
+COPY start.sh ./start.sh
+RUN chmod +x start.sh
+
+# Create non-root user and set permissions
 RUN adduser --disabled-password --gecos '' appuser && \
-    chown -R appuser:appuser /app
+    chown -R appuser:appuser /app && \
+    chmod +x /app/start.sh
 USER appuser
 
 # Expose port
@@ -39,5 +44,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-8000}/health || exit 1
 
-# Start application
-CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
+# Start application using start script
+CMD ["./start.sh"]

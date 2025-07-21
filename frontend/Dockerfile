@@ -28,6 +28,10 @@ RUN npm install -g serve
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
 
+# Copy start script
+COPY start.sh ./start.sh
+RUN chmod +x start.sh
+
 # Create non-root user
 RUN addgroup -g 1001 -S appuser && \
     adduser -S appuser -u 1001 -G appuser && \
@@ -43,5 +47,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-3000}/ || exit 1
 
-# Start static file server
-CMD serve -s dist -l ${PORT:-3000}
+# Start static file server using start script
+CMD ["./start.sh"]
