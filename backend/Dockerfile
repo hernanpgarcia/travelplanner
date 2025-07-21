@@ -18,16 +18,17 @@ RUN pip install poetry
 RUN poetry config virtualenvs.create false
 
 # Copy dependency files
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml ./
+COPY poetry.loc[k] ./
 
-# Install dependencies
-RUN poetry install --no-dev --no-root
+# Install dependencies (generate lock file if it doesn't exist)
+RUN poetry lock --no-update || true && poetry install --only=main --no-root
 
 # Copy application code
 COPY . .
 
 # Install project
-RUN poetry install --no-dev
+RUN poetry install --only=main
 
 # Create non-root user
 RUN adduser --disabled-password --gecos '' appuser && \
@@ -42,4 +43,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
 # Start application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
