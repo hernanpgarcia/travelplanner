@@ -13,11 +13,11 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Install serve for static hosting
-RUN npm install -g serve@14.2.1
+# Install http-server for static hosting (more reliable than serve)
+RUN npm install -g http-server
 
 # Expose port
 EXPOSE 3000
 
-# Start command
-CMD ["sh", "-c", "serve -s dist -p ${PORT:-3000}"]
+# Start command - http-server has better Railway compatibility
+CMD ["sh", "-c", "http-server dist -p ${PORT:-3000} --cors -c-1"]
