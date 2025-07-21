@@ -9,7 +9,8 @@ import os
 from functools import lru_cache
 from typing import List
 
-from pydantic import BaseSettings, validator
+from pydantic import field_validator
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -61,21 +62,24 @@ class Settings(BaseSettings):
     enable_websockets: bool = True
     enable_metrics: bool = True
     
-    @validator("allowed_origins", pre=True)
+    @field_validator("allowed_origins", mode="before")
+    @classmethod
     def assemble_cors_origins(cls, v):
         """Parse comma-separated CORS origins."""
         if isinstance(v, str):
             return [i.strip() for i in v.split(",")]
         return v
     
-    @validator("debug", pre=True)
+    @field_validator("debug", mode="before")
+    @classmethod
     def parse_debug(cls, v):
         """Parse debug flag from string."""
         if isinstance(v, str):
             return v.lower() in ("true", "1", "yes", "on")
         return v
     
-    @validator("environment")
+    @field_validator("environment")
+    @classmethod
     def validate_environment(cls, v):
         """Validate environment value."""
         valid_envs = ["development", "staging", "production", "test"]
@@ -83,9 +87,10 @@ class Settings(BaseSettings):
             raise ValueError(f"Environment must be one of: {valid_envs}")
         return v
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
+    model_config = {
+        "env_file": ".env",
+        "case_sensitive": False
+    }
 
 
 class DevelopmentConfig(Settings):
