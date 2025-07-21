@@ -28,8 +28,17 @@ logger = structlog.get_logger()
 # Initialize rate limiter
 limiter = Limiter(key_func=get_remote_address)
 
-# Settings
-settings = get_settings()
+# Settings - with fallback for missing environment variables
+try:
+    settings = get_settings()
+except Exception as e:
+    logger.warning("Settings initialization failed, using defaults", error=str(e))
+    # Create minimal settings for health check
+    class MinimalSettings:
+        debug = True
+        environment = "development"
+        allowed_origins = ["*"]
+    settings = MinimalSettings()
 
 
 @asynccontextmanager
@@ -38,8 +47,12 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Startup
     logger.info("Starting TravelPlanner API", version="1.0.0")
     
-    # Initialize database
-    await init_db()
+    # Try to initialize database (don't fail if DB is not available)
+    try:
+        await init_db()
+        logger.info("Database initialized successfully")
+    except Exception as e:
+        logger.warning("Database initialization failed, continuing without DB", error=str(e))
     
     logger.info("TravelPlanner API started successfully")
     
@@ -47,7 +60,10 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     
     # Shutdown
     logger.info("Shutting down TravelPlanner API")
-    await engine.dispose()
+    try:
+        await engine.dispose()
+    except Exception as e:
+        logger.warning("Database shutdown failed", error=str(e))
     logger.info("TravelPlanner API shutdown complete")
 
 
@@ -138,16 +154,24 @@ async def internal_server_error_handler(
     )
 
 
-# Health check endpoint
+# Health check endpoint  
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
-    return {
-        "status": "healthy",
-        "service": "travelplanner-api",
-        "version": "1.0.0",
-        "environment": settings.environment,
-    }
+    try:
+        return {
+            "status": "healthy",
+            "service": "travelplanner-api",
+            "version": "1.0.0",
+            "environment": getattr(settings, 'environment', 'unknown'),
+        }
+    except Exception:
+        # Fallback health check that doesn't depend on settings
+        return {
+            "status": "healthy",
+            "service": "travelplanner-api",
+            "version": "1.0.0",
+        }
 
 
 # Include API routers

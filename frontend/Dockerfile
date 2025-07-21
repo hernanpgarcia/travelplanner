@@ -19,19 +19,16 @@ RUN npm run type-check || true
 # Build application with Vite only
 RUN npx vite build
 
-# Production stage - use Node.js for Railway compatibility
+# Production stage - use Node.js with serve for Railway compatibility  
 FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Install serve globally for static file serving
+RUN npm install -g serve
 
-# Install only production dependencies and serve
-RUN npm install --only=production
-
-# Copy built files
+# Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
 
 # Create non-root user
@@ -45,9 +42,9 @@ USER appuser
 # Expose port
 EXPOSE 3000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:${PORT:-3000}/ || exit 1
+# Health check - check if the port is responding
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-3000}/ || exit 1
 
-# Start preview server
-CMD npm run preview -- --host 0.0.0.0 --port ${PORT:-3000}
+# Start static file server
+CMD serve -s dist -l ${PORT:-3000}
