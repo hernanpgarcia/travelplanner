@@ -13,11 +13,11 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Install http-server for static hosting (more reliable than serve)
-RUN npm install -g http-server
+# Copy custom server file
+COPY server.js ./server.js
 
 # Expose port
 EXPOSE 3000
 
-# Start command - http-server has better Railway compatibility
-CMD ["sh", "-c", "http-server dist -p ${PORT:-3000} --cors -c-1 --host 0.0.0.0"]
+# Start command - use custom Express server for better Railway compatibility
+CMD ["node", "server.js"]
