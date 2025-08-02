@@ -79,7 +79,7 @@ export function AuthDebugInfo({ className = '' }: { className?: string }) {
   const token = localStorage.getItem('access_token')
   const storedUser = localStorage.getItem('user')
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env['NODE_ENV'] === 'production') {
     return null
   }
 
