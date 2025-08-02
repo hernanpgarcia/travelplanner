@@ -9,6 +9,7 @@ import { Dashboard } from '@/pages/Dashboard'
 import { Profile } from '@/pages/Profile'
 import { AuthSuccess } from '@/pages/AuthSuccess'
 import { LandingPage } from '@/features/auth/components/LandingPage'
+import { LoginPage } from '@/features/auth/components/LoginPage'
 import { AuthCallback } from '@/features/auth/components/AuthCallback'
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute'
 
@@ -16,8 +17,8 @@ function App() {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LandingPage />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
       <Route path="/auth-success" element={<AuthSuccess />} />
       

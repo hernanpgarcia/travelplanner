@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelPlanner Google Login Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .demo-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .demo-section h2 {
+            color: #444;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .status-list {
+            list-style: none;
+            padding: 0;
+        }
+        .status-item {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .status-item.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-item.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-item.info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .demo-button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .demo-button:hover {
+            background: #357ae8;
+        }
+        .demo-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .flow-step {
+            text-align: center;
+            flex: 1;
+        }
+        .flow-arrow {
+            color: #4285f4;
+            font-size: 24px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌍 TravelPlanner Google Login Implementation</h1>
+    
+    <div class="demo-grid">
+        <div class="demo-section">
+            <h2>✅ System Status</h2>
+            <ul class="status-list">
+                <li class="status-item success">
+                    <span class="icon">✓</span>
+                    <span>Backend API running on port 8000</span>
+                </li>
+                <li class="status-item success">
+                    <span class="icon">✓</span>
+                    <span>Frontend running on port 3000</span>
+                </li>
+                <li class="status-item success">
+                    <span class="icon">✓</span>
+                    <span>Google OAuth endpoints configured</span>
+                </li>
+                <li class="status-item success">
+                    <span class="icon">✓</span>
+                    <span>JWT authentication system ready</span>
+                </li>
+                <li class="status-item warning">
+                    <span class="icon">⚠️</span>
+                    <span>Using test Google credentials</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🔐 Authentication Flow</h2>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div>👤</div>
+                    <small>User</small>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <div>🎯</div>
+                    <small>TravelPlanner</small>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <div>🔵</div>
+                    <small>Google OAuth</small>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-step">
+                    <div>🔑</div>
+                    <small>JWT Token</small>
+                </div>
+            </div>
+            
+            <button class="demo-button" onclick="window.open('http://localhost:3000', '_blank')">
+                Open TravelPlanner App
+            </button>
+            <button class="demo-button" onclick="window.open('http://localhost:3000/login', '_blank')">
+                Go Directly to Login Page
+            </button>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>🛠️ Implementation Details</h2>
+        
+        <h3>Backend Endpoints:</h3>
+        <div class="code-block">
+GET  /api/v1/auth/google/url    - Get Google OAuth URL
+POST /api/v1/auth/google        - Handle OAuth callback
+GET  /api/v1/auth/me           - Get current user
+POST /api/v1/auth/refresh      - Refresh JWT token
+POST /api/v1/auth/logout       - Logout user
+        </div>
+        
+        <h3>Frontend Components:</h3>
+        <div class="code-block">
+• LandingPage.tsx      - Login page with Google sign-in button
+• AuthCallback.tsx     - OAuth callback handler
+• ProtectedRoute.tsx   - Route protection component
+• authService.ts       - Authentication service layer
+• UserProfile.tsx      - User profile display
+        </div>
+        
+        <h3>Security Features:</h3>
+        <ul>
+            <li>✅ JWT tokens with expiration</li>
+            <li>✅ Secure token storage in localStorage</li>
+            <li>✅ CSRF protection via state parameter</li>
+            <li>✅ Protected API routes with Bearer authentication</li>
+            <li>✅ Automatic token refresh mechanism</li>
+        </ul>
+    </div>
+    
+    <div class="demo-section">
+        <h2>🚀 Live Application Preview</h2>
+        <p>The application is running at <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></p>
+        <iframe src="http://localhost:3000" title="TravelPlanner App"></iframe>
+    </div>
+    
+    <div class="demo-section">
+        <h2>📝 Next Steps</h2>
+        <p>To fully activate Google sign-in with real authentication:</p>
+        <ol>
+            <li>Create a Google Cloud project</li>
+            <li>Enable Google+ API and configure OAuth 2.0 credentials</li>
+            <li>Add <code>http://localhost:3000/auth/callback</code> to authorized redirect URIs</li>
+            <li>Update <code>backend/.env</code> with real credentials:
+                <div class="code-block">
+GOOGLE_CLIENT_ID=your-real-client-id
+GOOGLE_CLIENT_SECRET=your-real-client-secret
+                </div>
+            </li>
+            <li>Restart the backend server</li>
+        </ol>
+    </div>
+</body>
+</html>

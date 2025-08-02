@@ -6,6 +6,7 @@
 
 // Components
 export { LandingPage } from './components/LandingPage'
+export { LoginPage } from './components/LoginPage'
 export { AuthCallback } from './components/AuthCallback'
 export { ProtectedRoute } from './components/ProtectedRoute'
 export { UserProfile, UserDropdown } from './components/UserProfile'
