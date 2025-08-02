@@ -77,6 +77,8 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Inter', 'system-ui', 'sans-serif'],
+        roboto: ['Roboto', 'system-ui', 'sans-serif'],
+        questrial: ['Questrial', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         'lg': '0.75rem',

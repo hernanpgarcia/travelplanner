@@ -9,6 +9,8 @@ export { LandingPage } from './components/LandingPage'
 export { AuthCallback } from './components/AuthCallback'
 export { ProtectedRoute } from './components/ProtectedRoute'
 export { UserProfile, UserDropdown } from './components/UserProfile'
+export { AuthStatus, AuthDebugInfo } from './components/AuthStatus'
+export { SessionManager, useSessionActivity } from './components/SessionManager'
 
 // Hooks
 export { useAuth, useOAuthCallback, useRequireAuth } from './hooks/useAuth'

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { LoadingSpinner } from '@/shared/components/LoadingSpinner'
 import { CheckCircle, XCircle } from 'lucide-react'
+import { authService } from '@/features/auth/services/authService'
 
 export function AuthCallback() {
   const navigate = useNavigate()
@@ -39,30 +40,9 @@ export function AuthCallback() {
 
         console.log('🔵 Making API call to backend...')
         
-        // Direct API call to backend
-        const response = await fetch('http://localhost:8000/api/v1/auth/google', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ code, state: state || undefined }),
-        })
-
-        if (!response.ok) {
-          const errorText = await response.text()
-          console.error('🔴 Backend error:', errorText)
-          setError(`Authentication failed: ${errorText}`)
-          setIsProcessing(false)
-          setTimeout(() => navigate('/'), 3000)
-          return
-        }
-
-        const authData = await response.json()
+        // Use authService to handle callback
+        const authData = await authService.handleGoogleCallback(code, state || undefined)
         console.log('🟢 Auth successful:', authData.user?.email)
-
-        // Store auth data
-        localStorage.setItem('auth_token', authData.access_token)
-        localStorage.setItem('auth_user', JSON.stringify(authData.user))
 
         setSuccess(true)
         setIsProcessing(false)

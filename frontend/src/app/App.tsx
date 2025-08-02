@@ -6,9 +6,11 @@ import { Layout } from '@/shared/components/Layout'
 // Import features (these will be lazy loaded in production)
 import { HomePage } from '@/pages/HomePage'
 import { Dashboard } from '@/pages/Dashboard'
+import { Profile } from '@/pages/Profile'
 import { AuthSuccess } from '@/pages/AuthSuccess'
 import { LandingPage } from '@/features/auth/components/LandingPage'
-import { AuthCallbackSimple } from '@/features/auth/components/AuthCallbackSimple'
+import { AuthCallback } from '@/features/auth/components/AuthCallback'
+import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute'
 
 function App() {
   return (
@@ -16,11 +18,20 @@ function App() {
       {/* Public routes */}
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LandingPage />} />
-      <Route path="/auth/callback" element={<AuthCallbackSimple />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
       <Route path="/auth-success" element={<AuthSuccess />} />
       
       {/* Protected routes */}
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      } />
       
       <Route path="/trips/:tripId" element={
         <Layout>

@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast'
 
 import App from './app/App'
 // import App from './app/AppMinimal'
+import { SessionManager } from './features/auth'
 import './styles/index.css'
 
 // Create QueryClient with default options
@@ -33,7 +34,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <SessionManager 
+          sessionWarningMinutes={25}
+          sessionTimeoutMinutes={30}
+        >
+          <App />
+        </SessionManager>
         <Toaster
           position="top-right"
           toastOptions={{
