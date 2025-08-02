@@ -41,6 +41,29 @@ export function LandingPage() {
   
   return (
     <div className="bg-gradient-to-br from-[#ffffff] via-[#fafafa] to-[#f5f5f5] box-border content-stretch flex flex-col gap-1 items-center justify-start p-0 relative min-h-screen size-full">
+      {/* Fixed CTA Bar */}
+      <div className="fixed bg-white/95 backdrop-blur-md bottom-0 box-border content-stretch flex flex-col items-center justify-end left-0 right-0 min-h-[120px] px-8 py-5 z-50 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)]">
+        <div
+          aria-hidden="true"
+          className="absolute border-[1px_0px_0px] border-[rgba(0,0,0,0.1)] border-solid inset-0 pointer-events-none"
+        />
+        <div className="w-full max-w-[1280px] mx-auto flex flex-col items-center">
+          <button
+            onClick={handleStartPlanning}
+            className="group flex flex-col font-roboto font-black justify-center leading-[0] relative shrink-0 text-[45px] text-center text-nowrap uppercase transition-all duration-300 hover:scale-105"
+          >
+            <p className="[text-decoration-line:underline] [text-decoration-style:solid] [text-underline-position:from-font] block leading-[normal] whitespace-pre text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-800 group-hover:from-primary-700 group-hover:to-primary-900">
+              Start Planning
+            </p>
+          </button>
+          <div className="flex flex-col font-sans h-5 justify-end leading-[0] not-italic relative shrink-0 text-[#616161] text-[15px] text-center uppercase w-[486px] mt-2">
+            <p className="block leading-[20px]">
+              Create your first collaborative trip in minutes
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="box-border content-stretch flex flex-row gap-2.5 h-[105px] items-center justify-center w-full max-w-[1280px] px-8">
         <Header />
@@ -64,16 +87,6 @@ export function LandingPage() {
               transparent group input. Stop arguing about where to go—start
               planning amazing trips together.
             </p>
-          </div>
-          
-          {/* Call to Action */}
-          <div className="mt-8">
-            <button
-              onClick={handleStartPlanning}
-              className="bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg px-8 py-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-            >
-              Start Planning Your Trip
-            </button>
           </div>
         </div>
 
@@ -129,6 +142,9 @@ export function LandingPage() {
           </div>
         </div>
       </div>
+      
+      {/* Spacer for fixed bar */}
+      <div className="h-[140px]"></div>
     </div>
   )
 }
