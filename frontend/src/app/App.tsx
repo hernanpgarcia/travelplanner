@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom'
 import { Layout } from '@/shared/components/Layout'
 
 // Import features (these will be lazy loaded in production)
-import { HomePage } from '@/pages/HomePage'
 import { Dashboard } from '@/pages/Dashboard'
 import { Profile } from '@/pages/Profile'
 import { AuthSuccess } from '@/pages/AuthSuccess'
