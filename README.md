@@ -26,17 +26,17 @@ TravelPlanner eliminates the endless group chats and decision paralysis that hap
 ### Current Status
 
 **✅ Phase 1**: Basic deployment with mock data  
-**🔄 Phase 2**: Database integration (planned)  
-**🔄 Phase 3**: Authentication system activation (planned)
+**✅ Phase 2**: Database integration with PostgreSQL  
+**✅ Phase 3**: Google OAuth authentication system working
 
 ---
 
 ## 🏗️ Architecture
 
 This is a monorepo containing:
-- **Backend**: FastAPI with PostgreSQL and Redis (planned)
-- **Frontend**: React with TypeScript and Tailwind CSS
-- **Deployment**: Render platform with auto-deploy
+- **Backend**: FastAPI with PostgreSQL database and Google OAuth
+- **Frontend**: React with TypeScript, Tailwind CSS, and auth integration
+- **Deployment**: Render platform with auto-deploy from GitHub
 - **Infrastructure**: Docker for local dev, GitHub Actions CI/CD
 
 ### Current Deployment Architecture
@@ -247,16 +247,16 @@ docs: update deployment documentation
 
 ## 📚 Documentation
 
-- **[Deployment Guide](./docs/DEPLOYMENT.md)** - Complete Render deployment process
-- **[Development Guide](./docs/DEVELOPMENT.md)** - Local development setup
-- **[API Documentation](http://localhost:8000/docs)** - When running locally
-- **[Architecture Decision Records](./docs/adr/)** - Design decisions
+**Streamlined documentation structure:**
 
-### Key Documentation Updates
+- **[README.md](./README.md)** - Main project overview and quick start (this file)
+- **[CLAUDE.md](./CLAUDE.md)** - Claude Code configuration and MCP setup
+- **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Complete deployment guide with Render
+- **[docs/DEVELOPMENT.md](./docs/DEVELOPMENT.md)** - Local development setup
+- **[docs/API.md](./docs/API.md)** - API endpoints and documentation
+- **[Live API Docs](http://localhost:8000/docs)** - Interactive API docs (when running locally)
 
-- ✅ **DEPLOYMENT.md**: Completely updated with Render process and Railway migration story
-- ✅ **README.md**: Current status and simplified quick start
-- 🔄 **DEVELOPMENT.md**: Local development workflow (to be updated)
+**All other documentation has been consolidated or removed for clarity.**
 
 ---
 
@@ -279,26 +279,26 @@ docs: update deployment documentation
 
 ## 🎯 Roadmap
 
-### Phase 1 - Foundation ✅ (Current)
+### Phase 1 - Foundation ✅ Complete
 - [X] Render deployment infrastructure
 - [X] React frontend with Vite
 - [X] FastAPI backend (simplified)
 - [X] CI/CD with GitHub Actions
 - [X] Development environment
 
-### Phase 2 - Database Integration 🔄
-- [ ] PostgreSQL service on Render
-- [ ] Database models and migrations
-- [ ] Replace mock data with persistence
-- [ ] Data management features
+### Phase 2 - Database Integration ✅ Complete
+- [X] PostgreSQL service on Render
+- [X] Database models and migrations
+- [X] Replace mock data with persistence
+- [X] Data management features
 
-### Phase 3 - Authentication 🔄
-- [ ] Google OAuth integration
-- [ ] User profile management
-- [ ] Protected routes and permissions
-- [ ] Session management
+### Phase 3 - Authentication ✅ Complete
+- [X] Google OAuth integration
+- [X] User profile management
+- [X] Protected routes and permissions
+- [X] Session management
 
-### Phase 4 - Collaborative Features 🔄
+### Phase 4 - Collaborative Features 🔄 Next
 - [ ] Trip creation and management
 - [ ] City discovery and search
 - [ ] Voting system for destinations

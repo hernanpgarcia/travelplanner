@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
 import App from './app/App'
+// import App from './app/AppMinimal'
 import './styles/index.css'
 
 // Create QueryClient with default options

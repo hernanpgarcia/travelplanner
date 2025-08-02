@@ -4,31 +4,23 @@ import { Routes, Route } from 'react-router-dom'
 import { Layout } from '@/shared/components/Layout'
 
 // Import features (these will be lazy loaded in production)
+import { HomePage } from '@/pages/HomePage'
+import { Dashboard } from '@/pages/Dashboard'
+import { AuthSuccess } from '@/pages/AuthSuccess'
 import { LandingPage } from '@/features/auth/components/LandingPage'
-import { AuthCallback } from '@/features/auth/components/AuthCallback'
+import { AuthCallbackSimple } from '@/features/auth/components/AuthCallbackSimple'
 
 function App() {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<LandingPage />} />
+      <Route path="/auth/callback" element={<AuthCallbackSimple />} />
+      <Route path="/auth-success" element={<AuthSuccess />} />
       
       {/* Protected routes */}
-      <Route path="/dashboard" element={
-        <Layout>
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
-              <h1 className="text-2xl font-semibold text-secondary-900 mb-2">
-                Dashboard
-              </h1>
-              <p className="text-secondary-600">
-                Dashboard implementation coming soon...
-              </p>
-            </div>
-          </div>
-        </Layout>
-      } />
+      <Route path="/dashboard" element={<Dashboard />} />
       
       <Route path="/trips/:tripId" element={
         <Layout>
