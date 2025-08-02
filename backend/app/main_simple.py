@@ -160,8 +160,9 @@ async def get_google_auth_url():
     if not client_id:
         raise HTTPException(status_code=500, detail="Google Client ID not configured")
     
-    # Use frontend callback handler
-    redirect_uri = "http://localhost:3000/auth/callback"
+    # Use frontend callback handler - configurable for different environments
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+    redirect_uri = f"{frontend_url}/auth/callback"
     scope = "openid email profile"
     state = "mock-state"
     
