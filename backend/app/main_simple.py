@@ -189,12 +189,13 @@ async def handle_google_callback(request: GoogleOAuthRequest):
     
     # Exchange authorization code for access token
     token_url = "https://oauth2.googleapis.com/token"
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
     token_data = {
         "client_id": client_id,
         "client_secret": client_secret,
         "code": request.code,
         "grant_type": "authorization_code",
-        "redirect_uri": "http://localhost:3000/auth/callback",
+        "redirect_uri": f"{frontend_url}/auth/callback",
     }
     
     try:
