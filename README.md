@@ -141,26 +141,36 @@ ALGORITHM=HS256
 ENVIRONMENT=development
 DEBUG=true
 
-# Future: Authentication (Phase 3)
+# Authentication (REQUIRED for auth to work)
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
-GOOGLE_PLACES_API_KEY=your-places-api-key
 ```
 
 ### Production (Render)
 
-**Currently Active**:
-- `ENVIRONMENT=production`
-- `PYTHON_VERSION=3.11.8` 
-- `PYTHONPATH=/opt/render/project/src/backend`
-- `SECRET_KEY=<configured>`
-- `CORS_ORIGINS=<frontend-domain>`
+**⚠️ IMPORTANT**: Since `.env` files are not committed, you MUST configure these in Render:
 
-**Phase 2 (Database)**:
-- `DATABASE_URL=<auto-configured-by-render>`
+1. Go to your Render service → Environment
+2. Add these environment variables:
 
-**Phase 3 (Authentication)**:
-- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `JWT_SECRET_KEY`
+```bash
+# Required for Authentication
+GOOGLE_CLIENT_ID=your-actual-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-actual-client-secret
+SECRET_KEY=generate-a-secure-random-key
+
+# Application Settings
+ENVIRONMENT=production
+DEBUG=false
+PYTHON_VERSION=3.11.8
+PYTHONPATH=/opt/render/project/src/backend
+ALLOWED_ORIGINS=https://your-frontend-url
+
+# Database (if using Phase 2+)
+DATABASE_URL=<auto-configured-by-render>
+```
+
+**See [PRODUCTION_SETUP.md](./PRODUCTION_SETUP.md) for detailed instructions on configuring production environment.**
 
 ---
 
